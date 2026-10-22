@@ -1,0 +1,49 @@
+```text
+A*(start, goal) {
+
+    PQ = PriorityQueue();
+    VISITED = {};
+
+    g(start) = 0;
+    f(start) = g(start) + h(start);
+
+    PQ.insert(start, priority = f(start));
+
+    WHILE (PQ is not empty) {
+
+        n = PQ.remove_node_with_lowest_priority();
+
+        IF (goalTest(n)) {
+            RETURN SUCCESS;
+        }
+
+        VISITED.add(n);
+
+        FOR (each successor s of n) {
+
+            tentative_g = g(n) + cost(n, s);
+
+            IF (s in VISITED AND tentative_g >= g(s)) {
+                CONTINUE;
+            }
+
+            IF (s not in PQ OR tentative_g < g(s)) {
+
+                parent(s) = n;
+                g(s) = tentative_g;
+                f(s) = g(s) + h(s);
+
+                IF (s in VISITED) {
+                    VISITED.remove(s);
+                }
+
+                PQ.insert_or_update(s, priority = f(s));
+
+            }
+        }
+    }
+
+    RETURN FAILURE;
+}
+```
+
