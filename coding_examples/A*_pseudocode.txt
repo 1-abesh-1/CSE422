@@ -1,46 +1,30 @@
-A*(start, goal) {
+A_STAR(start):
+    OPEN   ← priority queue ordered by f(n), lowest first
+    CLOSED ← empty set
 
-    PQ = PriorityQueue();
-    VISITED = {};
+    insert start into OPEN        // g(start) = 0, f(start) = h(start)
 
-    g(start) = 0;
-    f(start) = g(start) + h(start);
+    while OPEN is not empty:
+        n ← remove node with lowest f(n) from OPEN
 
-    PQ.insert(start, priority = f(start));
+        if goalTest(n) then
+            return path from start to n    // follow parent pointers
 
-    WHILE (PQ is not empty) {
+        add n to CLOSED
 
-        n = PQ.remove_node_with_lowest_priority();
+        for each successor m of n:
+            if m is in CLOSED:
+                continue
 
-        IF (goalTest(n)) {
-            RETURN SUCCESS;
-        }
+            // g(m) is the path cost to m via n
+            // f(m) = g(m) + h(m)
 
-        VISITED.add(n);
+            if m is not in OPEN:
+                set parent(m) ← n
+                insert m into OPEN with priority f(m)
 
-        FOR (each successor s of n) {
+            else if the new g(m) (via n) is less than the g(m) stored in OPEN:
+                set parent(m) ← n
+                update m in OPEN with the new g(m) and f(m)
 
-            tentative_g = g(n) + cost(n, s);
-
-            IF (s in VISITED AND tentative_g >= g(s)) {
-                CONTINUE;
-            }
-
-            IF (s not in PQ OR tentative_g < g(s)) {
-
-                parent(s) = n;
-                g(s) = tentative_g;
-                f(s) = g(s) + h(s);
-
-                IF (s in VISITED) {
-                    VISITED.remove(s);
-                }
-
-                PQ.insert_or_update(s, priority = f(s));
-
-            }
-        }
-    }
-
-    RETURN FAILURE;
-}
+    return FAILURE    // OPEN is empty, no path exists
