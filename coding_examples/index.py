@@ -1,27 +1,27 @@
 print("Second-last level MAX values:")
 
-for node in second_last:
+for n in second_last:
 
-    children = tree[node]
+    children = tree[n]
 
-    max_value = leaf_values[children[0]]
+    max_v = leaf_values[children[0]]
     pruned = []
 
-    if max_value >= beta:
+    if max_v >= beta:
         pruned = children[1:]
 
     else:
         for i in range(1, len(children)):
-            value = leaf_values[children[i]]
+            v = leaf_values[children[i]]
 
-            if value > max_value:
-                max_value = value
+            if v > max_v:
+                max_v = v
 
-            if max_value >= beta:
+            if max_v >= beta:
                 pruned = children[i + 1:]
                 break
 
     if pruned:
-        print(node, "=", max_value, "-", pruned[0], "can be pruned")
+        print(n, "=", max_v, "-", pruned[0], "can be pruned")
     else:
-        print(node, "=", max_value)
+        print(n, "=", max_v)
